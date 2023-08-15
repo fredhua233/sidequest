@@ -4,20 +4,26 @@ function Login() {
     function handleGoogleSignIn(){
         alert("Fuck you jacob");
     }
+    function handleConsole(event) {
+      var console = document.getElementById("consoleChoice").value;
+      if(console === "Xbox"){
+        document.getElementById("description").innerHTML = "Support for Xbox coming soon...";
+      } else {
+        document.getElementById("description").innerHTML = " ";
+      }
+    }
     return (
-        <div class = "main">
-          <h1 class="sign">Login</h1>
-            <form class="form1"/>
-            <select class = 'gameChoice'>
-            <option value="Fortnite">Fortnite</option>
-            <option value="NFL Madden">NFL Madden23</option>
-            <option value="FIFA">FIFA 23</option>
-            <option value="Rocket League">Rocket League</option>
-            <option value = "UFC"> UFC </option>
-            <option value = "NBA 2K">NBA 2K</option>
-            </select>
+        <div class = "card">
+          <h1 class="title">Login</h1>
+          <form class = "form1">
+          <select class = "Choice" id = "consoleChoice" onChange = {handleConsole}>
+            <option value = "PSN">PlayStation</option>
+            <option value = "Xbox">Xbox</option>
+          </select>
+          </form>
             <input type = 'text' placeholder='Username' class = 'user' required></input>
-            <button class = "submit" onClick = {handleGoogleSignIn}> Google Sign In</button>
+            <button class = "submit" onClick = {handleGoogleSignIn}>Login</button>
+            <h2 class = "description" id = "description"> </h2>
         </div>
       );
   }
