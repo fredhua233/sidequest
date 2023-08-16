@@ -1,17 +1,17 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Challenges() {
     var gameDescription = "Win 1 game by submission, KO, or decision in the next hour!";
     const navigate = useNavigate();
     function handleClick(event)  {
-        navigate("/login")
+        navigate("/login", {state:{game: document.getElementById("gameChoice").value}})
     }
     function handleGame(event) {
         var game = document.getElementById("gameChoice").value;
         switch (game) {
             case "UFC":
-                document.getElementById("description").innerHTML = "Win 1 game by submission, KO, or decision in the next hour!";
+                document.getElementById("description").innerHTML = "Win 1 game by submission, KO, or decision in the next 1 hour!";
                 break;
             case "FIFA":
             case "NBA 2K":
@@ -40,8 +40,10 @@ function Challenges() {
             <option value = "Fortnite">Fortnite</option>
             </select>
             <h2 class="description" id = "description">{gameDescription}</h2>
-            <div>
+            <div class = "row">
+                <h2 class="text">Win $10</h2>
                 <button class = "submit" onClick = {handleClick}>I'm in!</button>
+                <h2 class="text">Stake $5</h2>
             </div>
         </div>
       );

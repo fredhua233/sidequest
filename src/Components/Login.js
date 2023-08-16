@@ -1,8 +1,16 @@
 import React from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import {addUser} from "../util/firebase.js";
 
 function Login() {
-    function handleGoogleSignIn(){
-        alert("Fuck you jacob");
+    const navigate = useNavigate();
+    const game = useLocation().state.game;
+
+    async function handlePSNSignIn(){
+      console.log(document.getElementById("username").value);
+      console.log(document.getElementById("consoleChoice").value);
+      console.log(game.toString());
+      await addUser(document.getElementById("username").value, document.getElementById("consoleChoice").value, game);
     }
     function handleConsole(event) {
       var console = document.getElementById("consoleChoice").value;
@@ -21,8 +29,8 @@ function Login() {
             <option value = "Xbox">Xbox</option>
           </select>
           </form>
-            <input type = 'text' placeholder='Username' class = 'user' required></input>
-            <button class = "submit" onClick = {handleGoogleSignIn}>Login</button>
+            <input type = 'text' placeholder='Username' class = 'user' id = "username" required></input>
+            <button class = "submit" onClick = {handlePSNSignIn}>Login</button>
             <h2 class = "description" id = "description"> </h2>
         </div>
       );
