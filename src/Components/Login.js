@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import {addUser} from "../util/firebase.js";
+import {addUser, getUser} from "../util/firebase.js";
 
 function Login() {
     const navigate = useNavigate();
@@ -8,7 +8,9 @@ function Login() {
 
     async function handlePSNSignIn(){
       // await addUser(document.getElementById("username").value, document.getElementById("consoleChoice").value, game);
-      // firestore func to add user to db
+      // ^firestore func to add user to db
+      // await getUser("kms");
+      // ^firestore func to get user from db
       navigate("/ingame");
     }
     function handleConsole(event) {
