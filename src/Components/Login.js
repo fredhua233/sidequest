@@ -7,10 +7,9 @@ function Login() {
     const game = useLocation().state.game;
 
     async function handlePSNSignIn(){
-      console.log(document.getElementById("username").value);
-      console.log(document.getElementById("consoleChoice").value);
-      console.log(game.toString());
-      await addUser(document.getElementById("username").value, document.getElementById("consoleChoice").value, game);
+      // await addUser(document.getElementById("username").value, document.getElementById("consoleChoice").value, game);
+      // firestore func to add user to db
+      navigate("/ingame");
     }
     function handleConsole(event) {
       var console = document.getElementById("consoleChoice").value;
@@ -30,7 +29,7 @@ function Login() {
           </select>
           </form>
             <input type = 'text' placeholder='Username' class = 'user' id = "username" required></input>
-            <button class = "submit" onClick = {handlePSNSignIn}>Login</button>
+            <button class = "submit" onClick = {handlePSNSignIn}>Start Now!</button>
             <h2 class = "description" id = "description"> </h2>
         </div>
       );

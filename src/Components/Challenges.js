@@ -5,13 +5,13 @@ function Challenges() {
     var gameDescription = "Win 1 game by submission, KO, or decision in the next hour!";
     const navigate = useNavigate();
     function handleClick(event)  {
-        navigate("/login", {state:{game: document.getElementById("gameChoice").value}})
+        navigate("/login", {state:{game: document.getElementById("gameChoice").value}});
     }
     function handleGame(event) {
         var game = document.getElementById("gameChoice").value;
         switch (game) {
             case "UFC":
-                document.getElementById("description").innerHTML = "Win 1 game by submission, KO, or decision in the next 1 hour!";
+                document.getElementById("description").innerHTML = "Win as many games in a row by submission, KO, or decision in the next hour!";
                 break;
             case "FIFA":
             case "NBA 2K":
@@ -41,9 +41,9 @@ function Challenges() {
             </select>
             <h2 class="description" id = "description">{gameDescription}</h2>
             <div class = "row">
-                <h2 class="text">Win $10</h2>
-                <button class = "submit" onClick = {handleClick}>I'm in!</button>
                 <h2 class="text">Stake $5</h2>
+                <button class = "submit" onClick = {handleClick}>I'm in!</button>
+                <h2 class="text">Max win: 5x</h2>
             </div>
         </div>
       );
