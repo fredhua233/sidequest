@@ -40,9 +40,13 @@ function Challenges() {
             <option value = "Fortnite">Fortnite</option>
             </select>
             <h2 class="description" id = "description">{gameDescription}</h2>
-            <div class = "row">
+            
+            <div class = "stakes">
                 <h2 class="text">Stake $5</h2>
+                <br></br>
                 <button class = "submit" onClick = {handleClick}>I'm in!</button>
+                <br></br>
+                <br></br>
                 <h2 class="text">Max win: 5x</h2>
             </div>
         </div>

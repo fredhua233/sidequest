@@ -51,9 +51,14 @@ function InGame() {
     };
 
     function handleImage(e) {
-        console.log(e.target.files);
+      const image = e.target.files;
+      console.log(e.target.files);
+      if (image){
         setFile(URL.createObjectURL(e.target.files[0]));
-    }  
+        document.getElementById("up").removeAttribute("hidden");
+      }
+      
+    };  
       
     const handleTimerEnd = () => {
         valid = false; // set to false when timer ends, so that the user cannot submit a screenshot
@@ -62,11 +67,16 @@ function InGame() {
     };
     
       return (
-        <div class = "card">
-            <h1 class = "title">Countdown Timer</h1>
-            <Timer onTimerEnd={handleTimerEnd} />
-            <h2 class = "description">Add Image:</h2>
-            <input type="file" onChange={handleImage} />
+        <div>
+          <div class = "card">
+              <h1 class = "title">Countdown Timer</h1>
+              <Timer onTimerEnd={handleTimerEnd} />
+              <h2 class = "description">Add Image:</h2>
+              <input class ="fileSubmit" type="file" onChange={handleImage} />
+              <br></br>
+              <input type= "submit" value="Submit Photo"/>
+          </div>
+        <img id = "up" class = "uploadedImage" src = {file} hidden/>
         </div>
       );
       
