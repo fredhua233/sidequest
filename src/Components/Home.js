@@ -3,7 +3,6 @@ import React from 'react';
 
 
 function Profile() {
-
     return (
         <div class = "card">
           <h1 class="title">Login</h1>
