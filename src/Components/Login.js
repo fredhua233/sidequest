@@ -31,7 +31,8 @@ function Login() {
       }
     }
     return (
-        <div class = "card">
+      <div class = "body">
+          <div class = "card">
           <h1 class="title">Login</h1>
           <form class = "form1">
           <select class = "Choice" id = "consoleChoice" onChange = {handleConsole}>
@@ -43,6 +44,7 @@ function Login() {
             <button class = "submit" onClick = {handlePSNSignIn}>Start Now!</button>
             <h2 class = "description" id = "description"> </h2>
         </div>
+      </div>
       );
   }
 
