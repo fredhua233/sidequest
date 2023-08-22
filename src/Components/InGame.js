@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 function InGame() {
     const navigate = useNavigate();
     const [file, setFile] = useState();
+    const [fileUp, setFileUp] = useState();
 
     const Timer = ({ onTimerEnd }) => {
         
@@ -57,14 +58,12 @@ function InGame() {
     };
 
     function handleImage(e) {
-//         console.log(e.target.files[0]);
-//         setFile(e.target.files[0]);
- 
         
       const image = e.target.files;
       console.log(e.target.files);
       if (image){
         setFile(URL.createObjectURL(e.target.files[0]));
+        setFileUp(e.target.files[0])
         document.getElementById("up").removeAttribute("hidden");
       }
       
@@ -77,12 +76,21 @@ function InGame() {
             localStorage.setItem("ingame", false);
             navigate("/");
             return;
-        } else if(file === undefined){
+        } 
+        if(localStorage.getItem("expireTime") === null || localStorage.getItem("ingame") === false){
+            alert("Please enter a challenge!");
+            localStorage.setItem("ingame", false);
+            navigate("/");
+            return;
+        } //this is not working, user can refresh page and reupload screenshot
+        
+        else if(file === undefined){
             alert("Please upload a screenshot.");
             return;
         } else {
-            await uploadImage(localStorage.getItem("username"), file);
+            await uploadImage(localStorage.getItem("username"), fileUp);
             localStorage.setItem("ingame", false);
+            localStorage.removeItem("expireTime");
             alert("Submitted! Try a new challenge");
             navigate("/");
         }
@@ -104,10 +112,10 @@ function InGame() {
             <div className="row">
               <input className = "fileUpload" type="file" accept="image/*" onChange={handleImage}/>
             </div>
+            <img id = "up" alt = "" class = "uploadedImage" src = {file} hidden/>
             <div className="row">
               <button className = "submit" id = "submitScreenshot" onClick = {handleUpload}>Submit</button>
             </div>
-            <img id = "up" class = "uploadedImage" src = {file} hidden/>
         </div>
       );
       
