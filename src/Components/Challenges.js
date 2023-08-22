@@ -77,7 +77,7 @@ function Challenges() {
 //                 <br></br>
 //                 <br></br>
 //                 <h2 class="text">Max win: 5x</h2>
-//             </div>
+            </div>
         </h1>
       );
   }
