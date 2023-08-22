@@ -57,14 +57,19 @@ function InGame() {
     };
 
     function handleImage(e) {
-        console.log(e.target.files[0]);
-        setFile(e.target.files[0]);
+//         console.log(e.target.files[0]);
+//         setFile(e.target.files[0]);
+ 
+        
+      const image = e.target.files;
+      console.log(e.target.files);
+      if (image){
+        setFile(URL.createObjectURL(e.target.files[0]));
+        document.getElementById("up").removeAttribute("hidden");
+      }
+      
     }  
-
-    function handleTimerEnd(){
-        clearInterval();
-    }
-
+    
     async function handleUpload(e){
 
         if(Date.now() > localStorage.getItem("expireTime")){
@@ -81,9 +86,17 @@ function InGame() {
             alert("Submitted! Try a new challenge");
             navigate("/");
         }
-
-
     }
+
+    function handleTimerEnd(){
+        clearInterval();
+    }
+
+//     const handleTimerEnd = () => {
+//         valid = false; // set to false when timer ends, so that the user cannot submit a screenshot
+//         console.log('Timer ended!');
+//         //add upload to firebase storage function here
+//     };
 
       return (  
         <div className = "body">
@@ -92,9 +105,9 @@ function InGame() {
               <input className = "fileUpload" type="file" accept="image/*" onChange={handleImage}/>
             </div>
             <div className="row">
-      
               <button className = "submit" id = "submitScreenshot" onClick = {handleUpload}>Submit</button>
             </div>
+            <img id = "up" class = "uploadedImage" src = {file} hidden/>
         </div>
       );
       

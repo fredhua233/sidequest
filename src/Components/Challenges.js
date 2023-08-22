@@ -68,7 +68,16 @@ function Challenges() {
             <h2 class="description">Time: 60 min</h2>
             <h2 class="description">Stake $5, Win $20</h2>
             <button class = "submit" onClick={handleClick}>I'm in!</button>
-            </div>
+//             <h2 class="description" id = "description">{gameDescription}</h2>
+            
+//             <div class = "stakes">
+//                 <h2 class="text">Stake $5</h2>
+//                 <br></br>
+//                 <button class = "submit" onClick = {handleClick}>I'm in!</button>
+//                 <br></br>
+//                 <br></br>
+//                 <h2 class="text">Max win: 5x</h2>
+//             </div>
         </h1>
       );
   }
