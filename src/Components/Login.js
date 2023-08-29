@@ -40,7 +40,7 @@ function Login() {
             <option value = "Xbox">Xbox</option>
           </select>
           </form>
-            <input type = 'text' placeholder='Username' class = 'user' id = "username" required></input>
+            <input type ='text' placeholder='Username' class = 'user' id = "username" required></input>
             <button class = "submit" onClick = {handlePSNSignIn}>Start Now!</button>
             <h2 class = "description" id = "description"> </h2>
         </div>

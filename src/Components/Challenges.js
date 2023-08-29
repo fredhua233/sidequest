@@ -65,6 +65,7 @@ function Challenges() {
             <option value = "Rocket League">Rocket League</option>
             <option value = "Fortnite">Fortnite</option>
             </select>
+            <div class = "row">
             <div class = "challenge">
                 <h2 class="descriptionBig" id = "description">{gameDescription}</h2>
                 <h2 class="description">Time: 60 min</h2>
@@ -80,7 +81,20 @@ function Challenges() {
                  <br></br>
                  <h2 class="text">Max win: 5x</h2> */}
             </div>
-            <h1 class= "title">Or bet against other players!</h1>
+            <div class = "challenge">
+                <h2 class="descriptionBig" id = "description">Get to the next division!</h2>
+                <h2 class="description">Time: 7 days</h2>
+                <h2 class="description">Stake $10, Win $40</h2>
+                <button class = "submit" onClick={handleClick}>I'm in!</button>
+            </div>
+            <div class = "challenge">
+                <h2 class="descriptionBig" id = "description">Win by submission!</h2>
+                <h2 class="description">Time: 30 min</h2>
+                <h2 class="description">Stake $5, Win $20</h2>
+                <button class = "submit" onClick={handleClick}>I'm in!</button>
+            </div>
+            </div>
+            <h1 class= "title">Or bet against friends!</h1>
             <button class = "submit" onClick={findPlayers}>Queue up</button>
         </h1>
       );
