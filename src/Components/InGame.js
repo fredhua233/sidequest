@@ -1,5 +1,6 @@
 import {React, useState, useEffect } from 'react';
 import { uploadImage } from '../util/firebase';
+import Popup from 'reactjs-popup';
 import { useNavigate } from 'react-router-dom';
 
 //TODO: 
@@ -8,9 +9,11 @@ import { useNavigate } from 'react-router-dom';
 function InGame() {
     const navigate = useNavigate();
     const [file, setFile] = useState();
+    const [file2, setFile2] = useState();
     const [fileUp, setFileUp] = useState();
+    const [file2Up, setFile2Up] = useState();
 
-    const Timer = ({ onTimerEnd }) => {
+    const Timer = ({ onTimerEnd }) => { //timer display
         
         const [remainingTime, setRemainingTime] = useState(3600);
 
@@ -48,8 +51,8 @@ function InGame() {
                   : 
                   (
                     <h1 className= "title">
-                    Submit your match history in: 
-                    {` ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
+                      Win 1 game in
+                    {` ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
                   </h1>
                   )
                   }
@@ -57,18 +60,27 @@ function InGame() {
         ); 
     };
 
-    function handleImage(e) {
-        
+
+    function handleImage(e) {        
       const image = e.target.files;
       console.log(e.target.files);
       if (image){
         setFile(URL.createObjectURL(e.target.files[0]));
         setFileUp(e.target.files[0])
         document.getElementById("up").removeAttribute("hidden");
-      }
-      
+      }      
     }  
     
+    function handleImage2(e) {
+      const image2 = e.target.files;
+      console.log(e.target.files);
+      if (image2){
+        setFile2(URL.createObjectURL(e.target.files[0]));
+        setFile2Up(e.target.files[0])
+        document.getElementById("up2").removeAttribute("hidden");
+      }
+    }  
+
     async function handleUpload(e){
 
         if(Date.now() > localStorage.getItem("expireTime")){
@@ -84,11 +96,11 @@ function InGame() {
             return;
         } //this is not working, user can refresh page and reupload screenshot
         
-        else if(file === undefined){
+        else if(file === undefined || file2 === undefined){
             alert("Please upload a screenshot.");
             return;
         } else {
-            await uploadImage(localStorage.getItem("username"), fileUp);
+            await uploadImage(localStorage.getItem("username"), fileUp, file2Up);
             localStorage.setItem("ingame", false);
             localStorage.removeItem("expireTime");
             alert("Submitted! Try a new challenge");
@@ -109,10 +121,16 @@ function InGame() {
       return (  
         <div className = "body">
             <Timer onTimerEnd={handleTimerEnd} />
+            <h1 className="title">1. Take photo of the start of the game</h1>
             <div className="row">
               <input className = "fileUpload" type="file" accept="image/*" onChange={handleImage}/>
             </div>
             <img id = "up" alt = "" class = "uploadedImage" src = {file} hidden/>
+            <h1 className="title">2. Submit screenshot of your post game summary</h1>
+            <div className="row">
+              <input className = "fileUpload" type="file" accept="image/*" onChange={handleImage2}/>
+            </div>
+            <img id = "up2" alt = "" class = "uploadedImage" src = {file2} hidden/>
             <div className="row">
               <button className = "submit" id = "submitScreenshot" onClick = {handleUpload}>Submit</button>
             </div>

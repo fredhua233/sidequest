@@ -1,7 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, setDoc, getDoc, updateDoc} from "firebase/firestore";
+import { getFirestore, doc, addDoc, setDoc, getDoc, updateDoc, collection} from "firebase/firestore";
 import { getStorage, ref, uploadBytes} from "firebase/storage";
+import { v4 as uuidv4 } from 'uuid';
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -40,11 +41,12 @@ export async function addUser(name, platform, game, balance) {
 }
 
 export async function getUser(name) {
+  var user;
   await getDoc(doc(db, "users", name))
   .then((doc) => {
     if (doc.exists()) {
-      console.log("Document data:", doc.data());
-      return doc.data();
+      // console.log("Document data:", doc.data());
+      user = doc.data();
     } else {
       console.log("No such document!");
     }
@@ -52,17 +54,24 @@ export async function getUser(name) {
   .catch((error) => {
     console.log("Error getting document:", error);
   });
+  
+  return user;
 }
 
-export async function uploadImage(username, file){
-  const storageRef = ref(storage, '/' + username + '/' + file.name);
-  await uploadBytes(storageRef, file)
-  .then((snapshot) => {
-    console.log('Uploaded a blob or file!')
-  })
-  .catch((error) => {
-      console.log("Error getting document:", error);
-    });
+export async function uploadImage(username, file, file2){
+  var fileList = [];
+  fileList.push(file);
+  fileList.push(file2);
+  for(var i = 0; i < 2; i++){
+    const storageRef = ref(storage, '/' + username + '/' + fileList[i].name);
+    await uploadBytes(storageRef, fileList)
+    .then((snapshot) => {
+      console.log('Uploaded a blob or file!')
+    })
+    .catch((error) => {
+        console.log("Error getting document:", error);
+      });
+  }
 }
 
 export async function currentBalance(username){ // subtracts amt from user's balance
@@ -83,6 +92,39 @@ export async function currentBalance(username){ // subtracts amt from user's bal
   return balance;
 }
 
+export async function updateBalance(username, amt){
+  const docRef = doc(db, "users", username);
+
+  await updateDoc(docRef, {
+    balance: amt,
+    // ingame: true,
+  })
+  .then(() => {
+  })
+  .catch((error) => {
+      console.error("Error writing document: ", error);
+  });
+}
+
+export async function addBalanceStripe(username){
+  const uuid = uuidv4();
+  console.log(uuid);
+  const colRef = collection(db, "customers", uuid, "checkout_sessions");
+  await addDoc(colRef, {
+    "mode": "payment",
+    "price": "price_1NZfrHKeC6UCUS43GapvvWkm",
+    "success_url":
+        "http://localhost:3000/profile",
+    "cancel_url":
+        "http://localhost:3000/profile"
+  })
+  .then((docRef) => {
+    console.log("Balance added $10");
+  })
+  .catch((error) => {
+    console.error("Error adding document: ", error);
+  });
+}
 // export async function getInGame(username){
 //   const docRef = doc(db, "users", username);
 //   var ingame;
@@ -112,17 +154,3 @@ export async function currentBalance(username){ // subtracts amt from user's bal
 //   });
 // }
 
-export async function updateBalance(username, amt){
-  const docRef = doc(db, "users", username);
-
-  await updateDoc(docRef, {
-    balance: amt,
-    // ingame: true,
-  })
-  .then(() => {
-  })
-  .catch((error) => {
-      console.error("Error writing document: ", error);
-  });
-}
- 
