@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, addDoc, setDoc, getDoc, updateDoc, collection} from "firebase/firestore";
+import React, { useEffect, useState } from 'react';
+import { getFirestore, doc, addDoc, setDoc, getDoc, getDocs, updateDoc, collection, query, where, increment} from "firebase/firestore";
 import { getStorage, ref, uploadBytes} from "firebase/storage";
 import { v4 as uuidv4 } from 'uuid';
 // import { getAnalytics } from "firebase/analytics";
@@ -19,18 +20,24 @@ const firebaseConfig = {
   measurementId: "G-DSSL2BS1M5"
 };
 
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
+export const db = getFirestore(app);
+export const storage = getStorage(app);
 
-export async function addUser(name, platform, game, balance) {
-  await setDoc(doc(db, "users", name), {
-    name: name,
-    platform: platform,
-    game: game,
-    balance: balance,
-    // ingame: false,
+
+
+export async function addHost(roomName, username, host, venmo) {
+  const docRef = doc(db, "rooms", roomName);
+  const colRef = collection(docRef, "users");
+
+  await setDoc(doc(colRef, username), {
+    name: username,
+    host: host,
+    paid: true,
+    // skill: skill,
+    venmo: venmo,
+    wins: 0,
   })
   .then(() => {
       console.log("Document successfully written!");
@@ -38,6 +45,118 @@ export async function addUser(name, platform, game, balance) {
   .catch((error) => {
       console.error("Error writing document: ", error);
   });
+}
+
+export async function addUser(roomName, username, venmo) {
+  const docRef = doc(db, "rooms", roomName);
+  const colRef = collection(docRef, "users");
+
+  await setDoc(doc(colRef, username), {
+    name: username,
+    host: false,
+    paid: true,
+    // skill: skill,
+    venmo: venmo,
+    wins: 0,
+  })
+  .then(() => {
+      console.log("Document successfully written!");
+  })
+  .catch((error) => {
+      console.error("Error writing document: ", error);
+  });
+}
+
+export async function makeRoom(roomName, username, venmo, buyin, game) {
+  await setDoc(doc(db, "rooms", roomName), {
+    roomName: roomName,
+    buyin: buyin,
+    venmo: venmo,
+    game: game,
+    open: true,
+  })
+  .then(() => {
+      console.log("Document successfully written!" + roomName + username + buyin);
+  })
+  .catch((error) => {
+      console.error("Error writing document: ", error);
+  });
+}
+
+export async function userAddWin(roomName, username){
+  const colRef = collection(doc(db, "rooms", roomName), "users");
+  const docRef = doc(colRef, username);
+  
+  await updateDoc(docRef, {
+    wins: increment(1),
+  })
+  .then(() => {
+    console.log(username + " has won a game");
+  })
+  .catch((error) => {
+      console.error("Error writing document: ", error);
+  });
+}
+
+export async function userLose(roomName, username){
+  const colRef = collection(doc(db, "rooms", roomName), "users");
+  const docRef = doc(colRef, username);
+  
+  await updateDoc(docRef, {
+    wins: increment(-1),
+  })
+  .then(() => {
+    console.log(username + " has lost a game");
+  })
+  .catch((error) => {
+      console.error("Error writing document: ", error);
+  });
+}
+
+//add winners array to round# at the end of round, addRound updates the room document
+export async function addWinnersToNextRound(roomName, rounds, winners) {
+  const docRef = doc(db, "rooms", roomName);
+
+  try {
+    const winPromises = winners.map(async (winner) => {
+      const colRef = collection(docRef, "round" + rounds);
+      await setDoc(doc(colRef, winner.name), winner);
+      console.log('Document created in ' + rounds + " " + winner.name);
+    });
+
+    await Promise.all(winPromises);
+    console.log('Objects added to Firestore successfully');
+  } catch(e){
+    console.error('Error adding objects to Firestore:', e);
+  }
+}
+
+export async function winnerToNextRound(roomName, rounds, winners) {
+  // const colRef = collection(doc(db, "rooms", roomName), "round" + rounds);
+  // await setDoc(doc(colRef, winner.name), winner)
+  // .then((doc) => {
+  //   console.log(winner.name + " autoadded to next round " + rounds);
+  // })
+  // .catch ((error) => {
+  //   console.error ("Error updating document:", error);
+  // })
+}
+
+export async function getRoom(roomName) {
+  var room;
+  await getDoc(doc(db, "rooms", roomName))
+  .then((doc) => {
+    if (doc.exists()) {
+      room = doc.data();
+    } else {
+      console.log("No such document!");
+    }
+  })
+  .catch((error) => {
+    console.log("Error getting document:", error);
+  });
+  
+  return room;
 }
 
 export async function getUser(name) {
@@ -125,6 +244,21 @@ export async function addBalanceStripe(username){
     console.error("Error adding document: ", error);
   });
 }
+
+// Replace with your Firebase configuration
+
+export async function openRooms() {
+  var rooms = [];
+
+  const colRef = collection(db, "rooms");
+  const docsSnap = await getDocs(colRef);
+  docsSnap.forEach(doc => {
+    rooms.push(doc.data());
+  })
+  return rooms;
+};
+
+
 // export async function getInGame(username){
 //   const docRef = doc(db, "users", username);
 //   var ingame;

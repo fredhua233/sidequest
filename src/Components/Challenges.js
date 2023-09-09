@@ -84,7 +84,7 @@ function Challenges() {
             <div class = "challenge">
                 <h2 class="descriptionBig" id = "description">Get to the next division!</h2>
                 <h2 class="description">Time: 7 days</h2>
-                <h2 class="description">Stake $10, Win $40</h2>
+                <h2 class="description">Stake $10, Win $0</h2>
                 <button class = "submit" onClick={handleClick}>I'm in!</button>
             </div>
             <div class = "challenge">

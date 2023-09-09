@@ -1,6 +1,6 @@
 import React from 'react';
 import {useNavigate, useLocation } from 'react-router-dom';
-import {addUser, updateBalance} from "../util/firebase.js";
+import {addHost, updateBalance} from "../util/firebase.js";
 
 function Login() {
     const navigate = useNavigate();
@@ -10,7 +10,7 @@ function Login() {
       // await getUser("kms");
       // ^firestore func to get user from db
       if(document.getElementById("username").value !== null && document.getElementById("username").value !== ""){
-        await addUser(document.getElementById("username").value, document.getElementById("consoleChoice").value, game, 1000);
+        await addHost(document.getElementById("username").value, document.getElementById("consoleChoice").value, game, 1000);
         updateBalance(document.getElementById("username").value, 500);
         if(localStorage.getItem("username") === null){
           localStorage.setItem("username", document.getElementById("username").value);
