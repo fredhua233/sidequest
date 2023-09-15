@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import React, { useEffect, useState } from 'react';
-import { getFirestore, doc, addDoc, setDoc, getDoc, getDocs, updateDoc, collection, query, where, increment} from "firebase/firestore";
+// import React, { useEffect, useState } from 'react';
+import { getFirestore, doc, addDoc, setDoc, getDoc, getDocs, updateDoc, collection, increment} from "firebase/firestore";
 import { getStorage, ref, uploadBytes} from "firebase/storage";
 import { v4 as uuidv4 } from 'uuid';
 // import { getAnalytics } from "firebase/analytics";
@@ -31,7 +31,7 @@ export async function addHost(roomName, username, host, venmo) {
   const docRef = doc(db, "rooms", roomName);
   const colRef = collection(docRef, "users");
 
-  await setDoc(doc(colRef, username), {
+  await setDoc(doc(db, 'rooms', roomName, 'users', username), {
     name: username,
     host: host,
     paid: true,
@@ -48,10 +48,11 @@ export async function addHost(roomName, username, host, venmo) {
 }
 
 export async function addUser(roomName, username, venmo) {
-  const docRef = doc(db, "rooms", roomName);
-  const colRef = collection(docRef, "users");
+  const docRef = doc(db, "users", roomName);
+  const colRef = collection(doc(db, "rooms", roomName), "users");
 
-  await setDoc(doc(colRef, username), {
+
+  await setDoc(doc(db, 'rooms', roomName, 'users', username), {
     name: username,
     host: false,
     paid: true,

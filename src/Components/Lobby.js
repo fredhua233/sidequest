@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useMediaQuery, useState, useEffect, useRef} from "react";
 import Navbar from './Navbar.js';
 import {app, db, userAddWin, userLose, addUser, getRoom, addWinnersToNextRound, winnerToNextRound} from "../util/firebase.js";
 import {onSnapshot, doc, collection, query, getDocs} from "firebase/firestore"
@@ -10,7 +10,7 @@ export default function Lobby() {
     const [ingame, setInGame] = useState(false);
     const [users, setUsers] = useState([]);
     const [rounds, setRounds] = useState(0);
-
+    const [isMobile, setIsMobile] = useState(window.innerWidth);
 
     console.log("b4 admin" + localStorage.getItem("admin"));
     if(!localStorage.getItem("admin")){
@@ -18,7 +18,7 @@ export default function Lobby() {
     }
 
     function copyToClipboard() {
-        navigator.clipboard.writeText(`Join ${name}'s FIFA tournament at https://www.sidequest.bet/lobby/${roomName}`);
+        navigator.clipboard.writeText(`Join ${name}'s FIFA tournament at http://localhost:3000/join/${roomName}`);
     }
     
     async function toggleInGame() {
@@ -93,7 +93,7 @@ export default function Lobby() {
             function MatchBracket(a, b, roomName){
                 //component to display a match between two users
             
-                return !end ? (
+                return (
                     <div class="flex justify-center">
               <button class="border border-transparent focus:border-amber-400 rounded-l-lg px-8 py-2 w-full bg-stone-800 hover:bg-stone-600 text-stone-50"
 
@@ -117,22 +117,6 @@ export default function Lobby() {
                 {b.name}
               </button>
             </div>
-                ) : 
-                (
-                    <div class="flex flex-col flex-1 justify-center gap-4">
-                    <h1>
-                        {initUsers[0].name} has won!
-                    </h1>
-                    <h1>
-                        Venmo: {initUsers[0].venmo}
-                    </h1>
-                    
-                    <button className = "fixed bottom-10 inline-flex items-center py-2 px-12 rounded-xl font-semibold shadow-sm text-stone-950 bg-amber-400 hover:bg-amber-500"
-                    onClick={navigator("/")}
-                    >
-                        Home
-                    </button>
-                  </div>
                 );
             }
             
@@ -144,8 +128,9 @@ export default function Lobby() {
                     try {
                       const querySnapshot = await getDocs(collectionName);
                       const fetchedDocuments = [];
-                      if(querySnapshot.size() === 1 ){
+                      if(querySnapshot.length < 1 ){
                         setEnd(true);
+                        console.log("game has ended" + end);
                       }
                       querySnapshot.forEach((doc) => {
                         // Add each document's data to the array
@@ -174,15 +159,32 @@ export default function Lobby() {
                         {
 
                             initUsers.map((user, index, arr) => {
+                                if(initUsers.length === 1 && end){
+                                    alert(`${initUsers[0].name} has won! Their venmo username is ${initUsers[0].venmo}`);
+                                    window.location.href = `venmo://users/${initUsers[0].venmo}`;
+                                    return (
+                                        <div>
+                                            <span>
+                                            ${initUsers[0].name} has won!
+                                            </span>
+                                            <br></br>
+                                            <button onClick={window.location.href = `venmo://users/${initUsers[0].venmo}`}>
+                                                Venmo {initUsers[0].venmo}
+                                            </button>
+                                        </div>
+                                    );
+                                }
                                 if (index % 2 === 0) {
                                     // Get two elements at a time and perform some operation
                                     const firstElement = user;
-                                    const secondElement = arr[index + 1]; // Get the next element
+                                    const secondElement = arr[index + 1];
+                                     // Get the next element
+                                    console.log("inside brackets" + user.name)
                                     if (secondElement !== undefined) {
                                       // Check if there's a next element
                                       return MatchBracket(firstElement, secondElement, roomName) // Return as an array of two elements
                                     }
-                                }
+                                } 
                             })
                         }
 
@@ -193,9 +195,19 @@ export default function Lobby() {
                     <button className = "fixed bottom-10 inline-flex items-center py-2 px-12 rounded-xl font-semibold shadow-sm text-stone-950 bg-amber-400 hover:bg-amber-500"
                     id="nextRoundButton"
                     onClick={async () => {
+                        
                         if(!localStorage.getItem("admin")){
                             alert("Please wait for host to start!");
                             return;
+                        }
+                        if(initUsers.length <= 1){
+                            setEnd(true);
+                            alert(`${initUsers[0].name} has won! Their venmo username is ${initUsers[0].venmo}`);
+                            if (isMobile <= 768){ 
+                                window.location = `venmo://users/${initUsers[0].venmo}`;
+                            } else {
+                                window.location= `https://account.venmo.com/u/${initUsers[0].venmo}/`;
+                            }
                         }
                         console.log("initUsers length " + initUsers.length);
                         if(initUsers.length%2 === 1){

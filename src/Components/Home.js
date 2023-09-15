@@ -20,7 +20,7 @@ export default function Home() {
               <div className = "text-center text-gray-50 text-2xl font-bold" id = "title">
                 Easily host{<Typewriter
                 options={{
-                  strings: ["FIFA⚽️", "Poker🃏", "Fantasy League🏈", "Super Smash Bros🥊", "Mario Kart🏁"],
+                  strings: ["FIFA", "Poker", "Fantasy League", "Super Smash Bros", "Mario Kart"],
                   autoStart: true,
                   delay: 125,
                   pauseFor: 2000,
@@ -28,7 +28,7 @@ export default function Home() {
                 }}
               />} tournaments
               </div>
-              <div className = "flex justify-center items-center text-gray-300 text-m font-bold">
+              <div className = "flex justify-center items-center text-center text-gray-300 text-m font-bold">
                 One place for brackets, buy-ins, and payouts
               </div>
             </div>

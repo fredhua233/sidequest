@@ -24,7 +24,7 @@ export default function EnterStats() {
         localStorage.setItem("username", username);
         localStorage.setItem("admin", true);
         id = room;
-        navigate(`/lobby/${room}`);
+        navigate(`/host/${room}`);
       }
     };
     return (

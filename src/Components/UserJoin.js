@@ -24,7 +24,7 @@ export default function UserJoin() {
             console.log(username);
             console.log(venmo);
             await addUser(id, username, venmo);
-            navigate(`/lobby/${lobby}`);
+            navigate(`/view/${lobby}`);
         }
     }
 
