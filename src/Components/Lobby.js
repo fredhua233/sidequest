@@ -18,7 +18,7 @@ export default function Lobby() {
     }
 
     function copyToClipboard() {
-        navigator.clipboard.writeText(`Join ${name}'s FIFA tournament at http://localhost:3000/join/${roomName}`);
+        navigator.clipboard.writeText(`Join ${name}'s FIFA tournament at https://sidequest-bet.vercel.app/join/${roomName}`);
     }
     
     async function toggleInGame() {
