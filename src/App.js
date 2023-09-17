@@ -1,5 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Login from './Components/Login';
 import Profile from './Components/Profile';
 import Challenges from './Components/Challenges'
@@ -26,7 +27,9 @@ function App() {
           <Route path="/view/:id" element = {<LobbyView/>}/>
           <Route exact path="/enterstats" element={<EnterStats/>}/>
         </Routes>
+        <Analytics />
     </Router>
+
   );
 }
 
