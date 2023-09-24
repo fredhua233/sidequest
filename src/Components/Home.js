@@ -9,7 +9,7 @@ import CurrentRooms from './CurrentRooms.js';
 
 
 export default function Home() {
-
+  //change tagline to clearer: Money solution for x games?
   return (
     <>
       <div>
@@ -27,7 +27,7 @@ export default function Home() {
                   loop: true,
                 }}
               />} tournaments
-              </div>
+              </div> 
               <div className = "flex justify-center items-center text-center text-gray-300 text-m font-bold">
                 One place for brackets, buy-ins, and payouts
               </div>

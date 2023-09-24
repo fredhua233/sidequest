@@ -2,6 +2,8 @@ import React, {useState, useEffect, useRef} from "react";
 import Navbar from './Navbar.js';
 import { useNavigate, useParams } from "react-router-dom";
 import { addUser, getRoom } from "../util/firebase.js";
+import axios from 'axios';
+
 
 export default function UserJoin() {
     //in this page, the user join a room by the id,
@@ -13,8 +15,9 @@ export default function UserJoin() {
     const [roomInfo, setRoomInfo] = useState();
     const [username, setUsername] = useState("");
     const [venmo, setVenmo] = useState("");
+    const [data, setData] = useState([]);
     
-    async function handleSubmit(e){
+    async function HandleSubmit(e){
         e.preventDefault();
         if(username === "" || venmo === ""){
             alert("Please fill out all fields");
@@ -24,12 +27,14 @@ export default function UserJoin() {
             console.log(username);
             console.log(venmo);
             await addUser(id, username, venmo);
-            navigate(`/view/${lobby}`);
+            window.open(`https://account.venmo.com/u/${roomInfo.venmo}`, "_blank");
+            navigate(`/view/${id}`);
         }
     }
 
     useEffect(() => {
         console.log(id);
+
         localStorage.setItem("room", id);
         localStorage.setItem("admin", false);
         const getRoomInfo = async () =>{
@@ -51,7 +56,7 @@ export default function UserJoin() {
                 Join {!loading && roomInfo.roomName}
                 </div>
 
-                <form className="space-y-6" onSubmit={handleSubmit}>
+                <form className="space-y-6" onSubmit={HandleSubmit}>
                 <div className="mt-2">
                   <input
                     id="username"
@@ -80,7 +85,7 @@ export default function UserJoin() {
                 <button
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-amber-400 px-3 py-1.5 text-sm font-semibold leading-6 text-stone-950 shadow-sm hover:bg-amber-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  onClick = {handleSubmit}
+                  onClick = {HandleSubmit}
                 >
                   JOIN
                 </button>
