@@ -160,6 +160,8 @@ export default function Lobby() {
 
                             initUsers.map((user, index, arr) => {
                                 if(initUsers.length === 1 && end){
+                                    
+
                                     alert(`${initUsers[0].name} has won! Their venmo username is ${initUsers[0].venmo}`);
                                     window.location.href = `venmo://users/${initUsers[0].venmo}`;
                                     return (
